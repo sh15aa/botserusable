@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enterprise Bot Product Factory - Reusable Code Library</title>
+  <meta name="description" content="Production-ready reusable code library for AI agents, conversational bots, messaging adapters, security guardrails, and distributed async systems.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#0284c7',
+              600: '#0369a1',
+              700: '#075985',
+              900: '#0c4a6e',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Prism.js for syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  
+  <style>
+    /* Custom scrollbars and styling */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    .glass-nav {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(51, 65, 85, 0.6);
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-sky-500 selection:text-white">
+
+  <!-- Sticky Glass Navbar -->
+  <nav class="glass-nav fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <span class="text-2xl">🤖</span>
+        <a href="#" class="font-bold text-lg tracking-tight hover:text-sky-400 transition-colors">
+          Bots<span class="text-sky-400">Reusable</span>
+        </a>
+        <span class="hidden sm:inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20">
+          v1.0.0
+        </span>
+      </div>
+
+      <div class="hidden md:flex items-center space-x-6 text-sm font-medium text-slate-300">
+        <a href="#modules" class="hover:text-white transition-colors">Modules (24)</a>
+        <a href="#agents-guide" class="hover:text-white transition-colors">Agent Protocol</a>
+        <a href="#architecture" class="hover:text-white transition-colors">Architecture</a>
+        <a href="#security" class="hover:text-white transition-colors">Zero-Vulnerability</a>
+        <a href="#pdf-hub" class="text-sky-400 hover:text-sky-300 flex items-center gap-1 font-semibold">
+          <span>📄 PDFs</span>
+        </a>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <a href="#pdf-hub" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white text-xs font-semibold shadow-lg shadow-sky-600/20 transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          Download PDF
+        </a>
+        <a href="https://github.com/sh15aa/botserusable" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-all">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path></svg>
+          <span>GitHub</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center relative overflow-hidden">
+    <div class="absolute inset-0 -z-10 flex items-center justify-center">
+      <div class="w-[600px] h-[350px] bg-sky-500/10 blur-[130px] rounded-full"></div>
+      <div class="w-[450px] h-[250px] bg-indigo-500/10 blur-[110px] rounded-full"></div>
+    </div>
+
+    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900 border border-slate-800 text-xs text-slate-300 mb-6 shadow-inner">
+      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+      <span>Enterprise Bot & AI Code Factory</span>
+      <span class="text-slate-600">•</span>
+      <span class="text-sky-400 font-semibold">Ready for Autonomous AI Agents</span>
+    </div>
+
+    <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white max-w-4xl mx-auto leading-tight">
+      Production Reusable Code for <br>
+      <span class="gradient-text">Conversational AI & Messaging Bots</span>
+    </h1>
+
+    <p class="mt-6 text-lg sm:text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
+      Hardened Python modules for <strong>WhatsApp Cloud API</strong>, <strong>Telegram</strong>, <strong>Chatwoot Live Support</strong>, <strong>Redis Mutex FSM Engines</strong>, and <strong>Dual-Tier AI Safety Guardrails</strong>. Built for direct consumption by AI coding agents.
+    </p>
+
+    <!-- Quick Buttons -->
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
+      <a href="#modules" class="px-6 py-3 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-semibold text-sm shadow-lg shadow-sky-600/25 transition-all">
+        Browse 24 Reusable Modules
+      </a>
+      <a href="#pdf-hub" class="px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-sm border border-slate-700 transition-all flex items-center gap-2">
+        <svg class="w-4 h-4 text-rose-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
+        Download PDF Handbook
+      </a>
+      <a href="https://github.com/sh15aa/botserusable" target="_blank" rel="noopener noreferrer" class="px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 font-semibold text-sm border border-slate-800 transition-all">
+        View on GitHub
+      </a>
+    </div>
+
+    <!-- Quick Curl Widget -->
+    <div class="mt-10 max-w-2xl mx-auto">
+      <div class="bg-slate-900/90 rounded-xl p-3 border border-slate-800 flex items-center justify-between text-left shadow-2xl backdrop-blur-sm">
+        <div class="flex items-center space-x-3 overflow-x-auto text-xs sm:text-sm font-mono text-slate-300 py-1 px-2">
+          <span class="text-sky-400 select-none">$</span>
+          <span class="whitespace-nowrap">curl -sSL https://raw.githubusercontent.com/sh15aa/botserusable/main/registry/modules.json</span>
+        </div>
+        <button onclick="copyCommand('curl -sSL https://raw.githubusercontent.com/sh15aa/botserusable/main/registry/modules.json')" class="ml-2 shrink-0 p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors" title="Copy command">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+        </button>
+      </div>
+      <p class="text-xs text-slate-500 mt-2">AI agents can fetch the registry directly to discover all modules without cloning the repo.</p>
+    </div>
+  </header>
+
+  <!-- PDF Hub Section -->
+  <section id="pdf-hub" class="py-16 bg-slate-900/60 border-y border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="text-sky-400 font-semibold text-sm uppercase tracking-wider">Offline & Archival Reading</span>
+        <h2 class="text-3xl font-bold text-white mt-2">PDF Documentation Center</h2>
+        <p class="text-slate-400 mt-3 text-sm sm:text-base">
+          All specifications, architectural diagrams, security audits, and module definitions are compiled into portable, print-ready PDF publications.
+        </p>
+      </div>
+
+      <!-- 3 PDF Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <!-- PDF 1: AGENTS.md -->
+        <div class="bg-slate-900 border border-slate-800 hover:border-sky-500/40 rounded-2xl p-6 flex flex-col justify-between transition-all group">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="p-3 rounded-xl bg-sky-500/10 text-sky-400 group-hover:scale-110 transition-transform">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+              </span>
+              <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-800 text-slate-300">114 KB PDF</span>
+            </div>
+            <h3 class="text-lg font-bold text-white group-hover:text-sky-400 transition-colors">AGENTS.md Specification</h3>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+              Standard protocol for AI agent consumption, "Reuse First, Build Second" policy, registry lookup rules, and multi-agent instructions.
+            </p>
+          </div>
+          <div class="mt-6 flex items-center gap-3">
+            <a href="/agents.pdf" download="AGENTS.pdf" class="flex-1 text-center py-2 px-3 rounded-lg bg-sky-600 hover:bg-sky-500 text-white text-xs font-semibold transition-colors flex items-center justify-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+              Download PDF
+            </a>
+            <button onclick="previewPdf('/agents.pdf', 'AGENTS.md Protocol')" class="py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-colors">
+              Preview
+            </button>
+          </div>
+        </div>
+
+        <!-- PDF 2: README.md -->
+        <div class="bg-slate-900 border border-slate-800 hover:border-indigo-500/40 rounded-2xl p-6 flex flex-col justify-between transition-all group">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="p-3 rounded-xl bg-indigo-500/10 text-indigo-400 group-hover:scale-110 transition-transform">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+              </span>
+              <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-800 text-slate-300">123 KB PDF</span>
+            </div>
+            <h3 class="text-lg font-bold text-white group-hover:text-indigo-400 transition-colors">Architecture & Security</h3>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+              Complete topology diagrams, zero-vulnerability security checklist, constant-time HMAC, Redis replay defense, and Docker Compose setup.
+            </p>
+          </div>
+          <div class="mt-6 flex items-center gap-3">
+            <a href="/readme.pdf" download="README_Architecture.pdf" class="flex-1 text-center py-2 px-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition-colors flex items-center justify-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+              Download PDF
+            </a>
+            <button onclick="previewPdf('/readme.pdf', 'Architecture & Security')" class="py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-colors">
+              Preview
+            </button>
+          </div>
+        </div>
+
+        <!-- PDF 3: Full Handbook -->
+        <div class="bg-gradient-to-b from-slate-900 to-slate-900/90 border-2 border-sky-500/30 hover:border-sky-500 rounded-2xl p-6 flex flex-col justify-between transition-all group relative overflow-hidden shadow-xl shadow-sky-950/40">
+          <div class="absolute -top-3 -right-3 w-16 h-16 bg-sky-500/20 rounded-full blur-xl"></div>
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="p-3 rounded-xl bg-emerald-500/10 text-emerald-400 group-hover:scale-110 transition-transform">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+              </span>
+              <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/30">MASTER 284 KB</span>
+            </div>
+            <h3 class="text-lg font-bold text-white group-hover:text-emerald-400 transition-colors">Complete Technical Manual</h3>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+              The full unified manual containing all 24 registered modules, classes, dependencies, environment variables, security audits, and agent guides.
+            </p>
+          </div>
+          <div class="mt-6 flex items-center gap-3">
+            <a href="/botserusable-handbook.pdf" download="BotsReusable_Complete_Manual.pdf" class="flex-1 text-center py-2 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-600/20">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+              Download Master PDF
+            </a>
+            <button onclick="previewPdf('/botserusable-handbook.pdf', 'Complete Technical Manual')" class="py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-colors">
+              Preview
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Embedded PDF Viewer Container (hidden by default) -->
+      <div id="pdf-viewer-card" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-4 transition-all">
+        <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-800">
+          <div class="flex items-center space-x-2">
+            <span class="text-sky-400 font-bold text-sm">Interactive PDF Viewer:</span>
+            <span id="pdf-viewer-title" class="text-white text-sm font-semibold">Document</span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <a id="pdf-viewer-download" href="#" download class="px-3 py-1 bg-sky-600 hover:bg-sky-500 text-white text-xs font-semibold rounded-lg transition-colors">
+              Download
+            </a>
+            <button onclick="closePdfViewer()" class="p-1 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+          </div>
+        </div>
+        <div class="w-full h-[650px] bg-slate-950 rounded-xl overflow-hidden border border-slate-800">
+          <iframe id="pdf-iframe" src="" class="w-full h-full border-0"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Modules Section -->
+  <section id="modules" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+      <div>
+        <span class="text-sky-400 font-semibold text-sm uppercase tracking-wider">Reusable Catalog</span>
+        <h2 class="text-3xl font-bold text-white mt-1">24 Ready-to-Use Modules</h2>
+        <p class="text-slate-400 text-sm mt-1">Filter, search, inspect code, or copy raw GitHub download URLs.</p>
+      </div>
+
+      <!-- Search Input -->
+      <div class="w-full md:w-80 relative">
+        <input 
+          type="text" 
+          id="search-input" 
+          placeholder="Search modules, classes, deps..." 
+          class="w-full bg-slate-900 border border-slate-800 rounded-xl py-2.5 pl-10 pr-4 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all"
+          oninput="filterModules()"
+        >
+        <svg class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+      </div>
+    </div>
+
+    <!-- Category Filter Pills -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-4 mb-8 text-xs font-medium" id="category-pills">
+      <button onclick="setCategory('all')" class="cat-pill active px-3.5 py-1.5 rounded-full bg-sky-600 text-white transition-colors" data-cat="all">All (24)</button>
+      <button onclick="setCategory('adapters')" class="cat-pill px-3.5 py-1.5 rounded-full bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800 transition-colors" data-cat="adapters">Adapters</button>
+      <button onclick="setCategory('engine')" class="cat-pill px-3.5 py-1.5 rounded-full bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800 transition-colors" data-cat="engine">Engine & FSM</button>
+      <button onclick="setCategory('ai')" class="cat-pill px-3.5 py-1.5 rounded-full bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800 transition-colors" data-cat="ai">AI & Guardrails</button>
+      <button onclick="setCategory('security')" class="cat-pill px-3.5 py-1.5 rounded-full bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800 transition-colors" data-cat="security">Security</button>
+      <button onclick="setCategory('schemas')" class="cat-pill px-3.5 py-1.5 rounded-full bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800 transition-colors" data-cat="schemas">UNMP Schemas</button>
+      <button onclick="setCategory('messaging')" class="cat-pill px-3.5 py-1.5 rounded-full bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800 transition-colors" data-cat="messaging">Messaging</button>
+      <button onclick="setCategory('identity')" class="cat-pill px-3.5 py-1.5 rounded-full bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800 transition-colors" data-cat="identity">Identity</button>
+      <button onclick="setCategory('payments')" class="cat-pill px-3.5 py-1.5 rounded-full bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800 transition-colors" data-cat="payments">Payments</button>
+      <button onclick="setCategory('worker')" class="cat-pill px-3.5 py-1.5 rounded-full bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800 transition-colors" data-cat="worker">Worker</button>
+    </div>
+
+    <!-- Modules Grid -->
+    <div id="modules-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Injected by JavaScript -->
+    </div>
+  </section>
+
+  <!-- Code Preview Modal -->
+  <div id="code-modal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-4xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-950">
+        <div>
+          <h3 id="modal-title" class="text-base font-bold text-white">Module Code</h3>
+          <p id="modal-path" class="text-xs font-mono text-sky-400">path/to/file.py</p>
+        </div>
+        <div class="flex items-center space-x-2">
+          <button onclick="copyModalCode()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition-colors flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+            Copy Code
+          </button>
+          <a id="modal-github-link" href="#" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white text-xs font-medium transition-colors">
+            View on GitHub
+          </a>
+          <button onclick="closeModal()" class="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          </button>
+        </div>
+      </div>
+      <div class="p-4 overflow-y-auto font-mono text-xs flex-1 bg-[#1d1f21]">
+        <pre class="!m-0 !p-0 !bg-transparent"><code id="modal-code" class="language-python"></code></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Agent Guide Section (AGENTS.md) -->
+  <section id="agents-guide" class="py-20 bg-slate-900/40 border-t border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mb-12">
+        <span class="text-sky-400 font-semibold text-sm uppercase tracking-wider">Protocol & Standard</span>
+        <h2 class="text-3xl font-bold text-white mt-1">AI Agent Consumption Guide</h2>
+        <p class="text-slate-400 mt-2 text-sm sm:text-base">
+          How to instruct autonomous coding agents (Claude Code, OpenAI Codex, Antigravity, Cursor) to use this repository from any different folder without rebuilding functionality.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Left: Steps -->
+        <div class="space-y-6">
+          <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+            <div class="flex items-center space-x-3 text-sky-400 font-bold text-sm mb-2">
+              <span class="w-6 h-6 rounded-full bg-sky-500/10 flex items-center justify-center text-xs">1</span>
+              <span>The Priority Rule</span>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              <code>Existing Reusable Module &gt; Existing Project Implementation &gt; New Implementation</code>. Agents must first check the registry and reuse compatible code before writing any custom implementations.
+            </p>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+            <div class="flex items-center space-x-3 text-sky-400 font-bold text-sm mb-2">
+              <span class="w-6 h-6 rounded-full bg-sky-500/10 flex items-center justify-center text-xs">2</span>
+              <span>Put AGENTS.md in Your New Project</span>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed mb-3">
+              When creating any new project folder (e.g. <code>my-whatsapp-crm/</code>), drop an <code>AGENTS.md</code> file in its root.
+            </p>
+            <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 font-mono text-[11px] text-slate-300 relative">
+              <button onclick="copyAgentsTemplate()" class="absolute top-2 right-2 text-xs bg-slate-800 hover:bg-slate-700 text-sky-400 px-2 py-1 rounded">Copy</button>
+              # PROJECT INSTRUCTIONS<br>
+              ## Reusable Code Library<br>
+              Search https://github.com/sh15aa/botserusable first.<br>
+              Inspect registry/modules.json before coding.
+            </div>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+            <div class="flex items-center space-x-3 text-sky-400 font-bold text-sm mb-2">
+              <span class="w-6 h-6 rounded-full bg-sky-500/10 flex items-center justify-center text-xs">3</span>
+              <span>Fast Zero-Install Module Fetching</span>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed mb-2">
+              Agents can fetch modules directly using raw GitHub endpoints:
+            </p>
+            <pre class="bg-slate-950 text-[11px] p-2.5 rounded-lg border border-slate-800"><code class="language-bash">curl -sSL https://raw.githubusercontent.com/sh15aa/botserusable/main/app/ai/guardrails.py -o app/ai/guardrails.py</code></pre>
+          </div>
+        </div>
+
+        <!-- Right: Test Prompt -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-sm font-bold text-white flex items-center gap-2">
+                <span>💬</span> Ready-to-Use Agent Prompt
+              </span>
+              <button onclick="copyTestPrompt()" class="px-3 py-1 bg-sky-600 hover:bg-sky-500 text-white text-xs font-semibold rounded-lg transition-colors">
+                Copy Prompt
+              </button>
+            </div>
+            <p class="text-xs text-slate-400 mb-4">
+              Give this exact prompt to an AI agent working in a separate project directory:
+            </p>
+            <div class="bg-slate-950 rounded-xl p-4 border border-slate-800 font-mono text-xs text-slate-300 leading-relaxed whitespace-pre-wrap select-all" id="agent-test-prompt">Build a customer support bot application with WhatsApp integration, human handoff, and PII guardrails.
+
+IMPORTANT:
+Before writing any implementation code:
+1. Inspect the reusable code registry at:
+   https://raw.githubusercontent.com/sh15aa/botserusable/main/registry/modules.json
+2. Identify all reusable modules that can satisfy these requirements.
+3. List:
+   - Requirement
+   - Module ID
+   - Library Path
+   - Why it is compatible
+4. Download and reuse those modules directly rather than recreating them from scratch.</div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-800 text-xs text-slate-500 flex items-center justify-between">
+            <span>Compatible with: Claude Code, Codex, Antigravity, Cursor, Copilot</span>
+            <span class="text-sky-400 font-semibold">Zero-Vulnerability</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture & Security Section -->
+  <section id="architecture" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mb-12">
+      <span class="text-sky-400 font-semibold text-sm uppercase tracking-wider">Topology & Controls</span>
+      <h2 class="text-3xl font-bold text-white mt-1">Zero-Vulnerability Architecture</h2>
+      <p class="text-slate-400 mt-2 text-sm sm:text-base">
+        A high-throughput, channel-agnostic async pipeline with constant-time cryptographic validation and Redis atomic locking.
+      </p>
+    </div>
+
+    <!-- Security Table -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl mb-12" id="security">
+      <div class="px-6 py-4 border-b border-slate-800 bg-slate-950 flex items-center justify-between">
+        <h3 class="text-sm font-bold text-white uppercase tracking-wider">Security Mitigation Matrix</h3>
+        <span class="text-xs text-emerald-400 font-semibold px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">Production Verified</span>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs sm:text-sm">
+          <thead class="bg-slate-950/60 text-slate-400 border-b border-slate-800">
+            <tr>
+              <th class="py-3.5 px-6 font-semibold">Threat Vector</th>
+              <th class="py-3.5 px-6 font-semibold">Mitigation Strategy</th>
+              <th class="py-3.5 px-6 font-semibold">Module</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800 text-slate-300">
+            <tr class="hover:bg-slate-800/40">
+              <td class="py-3.5 px-6 font-medium text-white">Side-Channel Timing Attacks</td>
+              <td class="py-3.5 px-6">Constant-time comparison with <code>hmac.compare_digest</code></td>
+              <td class="py-3.5 px-6 font-mono text-sky-400">gateway.security</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40">
+              <td class="py-3.5 px-6 font-medium text-white">Replay & Duplicate Events</td>
+              <td class="py-3.5 px-6">Atomic Redis <code>SET key 1 EX 86400 NX</code> validation</td>
+              <td class="py-3.5 px-6 font-mono text-sky-400">gateway.security</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40">
+              <td class="py-3.5 px-6 font-medium text-white">Button Mashing & Race Conditions</td>
+              <td class="py-3.5 px-6">Distributed Redis mutex lock with atomic Lua release script</td>
+              <td class="py-3.5 px-6 font-mono text-sky-400">engine.fsm</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40">
+              <td class="py-3.5 px-6 font-medium text-white">Prompt Injection & Canary Leakage</td>
+              <td class="py-3.5 px-6">Strict delimiter sandboxing + dynamic canary token scanning</td>
+              <td class="py-3.5 px-6 font-mono text-sky-400">ai.guardrails</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40">
+              <td class="py-3.5 px-6 font-medium text-white">PII Data Exposure</td>
+              <td class="py-3.5 px-6">Automated regex masking for credit cards, emails, SSNs, phones</td>
+              <td class="py-3.5 px-6 font-mono text-sky-400">ai.guardrails</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40">
+              <td class="py-3.5 px-6 font-medium text-white">Denial of Service / Flooding</td>
+              <td class="py-3.5 px-6">Atomic sliding-window rate limiting via Redis Lua script</td>
+              <td class="py-3.5 px-6 font-mono text-sky-400">security.rate_limiter</td>
+            </tr>
+            <tr class="hover:bg-slate-800/40">
+              <td class="py-3.5 px-6 font-medium text-white">Bot-to-Bot Ping-Pong Loops</td>
+              <td class="py-3.5 px-6">Rolling SHA-256 hash tracking over sliding observation window</td>
+              <td class="py-3.5 px-6 font-mono text-sky-400">security.loop_detector</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12 bg-slate-950 border-t border-slate-900 text-slate-500 text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex items-center space-x-3">
+        <span class="text-xl">🤖</span>
+        <span class="text-slate-300 font-semibold">BotsReusable</span>
+        <span>• Enterprise Reusable Code Factory</span>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-center gap-6">
+        <a href="https://github.com/sh15aa/botserusable" target="_blank" rel="noopener noreferrer" class="hover:text-slate-300 transition-colors">GitHub Repository</a>
+        <a href="/agents.pdf" download class="hover:text-slate-300 transition-colors">AGENTS.pdf</a>
+        <a href="/readme.pdf" download class="hover:text-slate-300 transition-colors">Architecture PDF</a>
+        <a href="/botserusable-handbook.pdf" download class="hover:text-slate-300 transition-colors">Master Manual PDF</a>
+      </div>
+
+      <div class="text-center md:text-right">
+        <span>Deployed on Cloudflare Pages for <strong class="text-slate-400">foundershivanand@gmail.com</strong></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-sky-600 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-2xl flex items-center gap-2">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+    <span id="toast-message">Copied to clipboard!</span>
+  </div>
+
+  <!-- Client-side Logic -->
+  <script>
+    let allModules = [];
+    let currentCategory = 'all';
+
+    // Fetch modules data
+    async function loadModules() {
+      try {
+        const resp = await fetch('/modules-data.json');
+        allModules = await resp.json();
+        renderModules();
+      } catch (e) {
+        console.error('Failed to load modules:', e);
+        // Fallback to fetch from registry directly
+        const resp = await fetch('/registry/modules.json');
+        const data = await resp.json();
+        allModules = data.modules || [];
+        renderModules();
+      }
+    }
+
+    function renderModules() {
+      const container = document.getElementById('modules-container');
+      const search = (document.getElementById('search-input').value || '').toLowerCase();
+      
+      const filtered = allModules.filter(m => {
+        const matchesCat = currentCategory === 'all' || m.category === currentCategory;
+        const matchesSearch = !search || 
+          m.id.toLowerCase().includes(search) ||
+          m.name.toLowerCase().includes(search) ||
+          m.description.toLowerCase().includes(search) ||
+          (m.classes && m.classes.some(c => c.toLowerCase().includes(search))) ||
+          (m.dependencies && m.dependencies.some(d => d.toLowerCase().includes(search)));
+        return matchesCat && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-16 text-center text-slate-500">
+            <p class="text-base font-semibold">No modules match your query</p>
+            <p class="text-xs mt-1">Try another keyword or select "All".</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(m => {
+        const rawUrl = `https://raw.githubusercontent.com/sh15aa/botserusable/main/${m.path}`;
+        const githubUrl = `https://github.com/sh15aa/botserusable/blob/main/${m.path}`;
+        const classes = (m.classes || []).map(c => `<span class="px-2 py-0.5 bg-slate-800 text-sky-400 rounded text-[11px] font-mono border border-slate-700/60">${c}</span>`).join(' ') || '<span class="text-slate-600 text-[11px]">N/A</span>';
+        const deps = (m.dependencies || []).map(d => `<span class="px-1.5 py-0.5 bg-slate-950 text-slate-400 rounded text-[10px] font-mono border border-slate-800">${d}</span>`).join(' ') || '<span class="text-slate-600 text-[10px]">None</span>';
+
+        return `
+          <div class="bg-slate-900 border border-slate-800/80 hover:border-slate-700 rounded-2xl p-5 flex flex-col justify-between transition-all group hover:shadow-xl">
+            <div>
+              <div class="flex items-start justify-between gap-2 mb-3">
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-sky-500/10 text-sky-400 border border-sky-500/20">
+                  ${m.id}
+                </span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase bg-slate-800 text-slate-400">
+                  ${m.category}
+                </span>
+              </div>
+
+              <h3 class="text-base font-bold text-white group-hover:text-sky-400 transition-colors">${m.name}</h3>
+              <p class="text-xs text-slate-400 mt-2 leading-relaxed line-clamp-3">${m.description}</p>
+
+              <div class="mt-4 pt-3 border-t border-slate-800/70 space-y-2">
+                <div>
+                  <span class="text-[10px] font-semibold uppercase tracking-wider text-slate-500 block mb-1">Classes:</span>
+                  <div class="flex flex-wrap gap-1">${classes}</div>
+                </div>
+                <div>
+                  <span class="text-[10px] font-semibold uppercase tracking-wider text-slate-500 block mb-1">Dependencies:</span>
+                  <div class="flex flex-wrap gap-1">${deps}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
+              <button onclick="previewCode('${m.id}')" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium transition-colors flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                Preview
+              </button>
+
+              <div class="flex items-center space-x-1.5">
+                <button onclick="copyCommand('${rawUrl}')" class="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors" title="Copy Raw Download URL">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                </button>
+                <a href="${githubUrl}" target="_blank" rel="noopener noreferrer" class="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors" title="View File on GitHub">
+                  <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function setCategory(cat) {
+      currentCategory = cat;
+      document.querySelectorAll('.cat-pill').forEach(btn => {
+        if (btn.getAttribute('data-cat') === cat) {
+          btn.className = 'cat-pill active px-3.5 py-1.5 rounded-full bg-sky-600 text-white transition-colors';
+        } else {
+          btn.className = 'cat-pill px-3.5 py-1.5 rounded-full bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800 transition-colors';
+        }
+      });
+      renderModules();
+    }
+
+    function filterModules() {
+      renderModules();
+    }
+
+    // Code Preview Modal
+    function previewCode(moduleId) {
+      const mod = allModules.find(m => m.id === moduleId);
+      if (!mod) return;
+
+      document.getElementById('modal-title').innerText = `${mod.name} (${mod.id})`;
+      document.getElementById('modal-path').innerText = mod.path;
+      document.getElementById('modal-github-link').href = `https://github.com/sh15aa/botserusable/blob/main/${mod.path}`;
+      
+      const codeEl = document.getElementById('modal-code');
+      codeEl.textContent = mod.code || '# Code not available';
+      Prism.highlightElement(codeEl);
+
+      document.getElementById('code-modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('code-modal').classList.add('hidden');
+    }
+
+    function copyModalCode() {
+      const code = document.getElementById('modal-code').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        showToast('Module code copied to clipboard!');
+      });
+    }
+
+    // PDF Preview
+    function previewPdf(url, title) {
+      const card = document.getElementById('pdf-viewer-card');
+      const titleEl = document.getElementById('pdf-viewer-title');
+      const dlEl = document.getElementById('pdf-viewer-download');
+      const iframe = document.getElementById('pdf-iframe');
+
+      titleEl.innerText = title;
+      dlEl.href = url;
+      iframe.src = url;
+
+      card.classList.remove('hidden');
+      card.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function closePdfViewer() {
+      const card = document.getElementById('pdf-viewer-card');
+      card.classList.add('hidden');
+      document.getElementById('pdf-iframe').src = '';
+    }
+
+    // Toast & Copy Functions
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      document.getElementById('toast-message').innerText = msg;
+      t.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => {
+        t.classList.add('translate-y-20', 'opacity-0');
+      }, 3000);
+    }
+
+    function copyCommand(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('URL copied to clipboard!');
+      });
+    }
+
+    function copyTestPrompt() {
+      const text = document.getElementById('agent-test-prompt').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('AI Agent prompt copied to clipboard!');
+      });
+    }
+
+    function copyAgentsTemplate() {
+      const template = `# PROJECT INSTRUCTIONS\n\n## Reusable Code Library\nThis project uses my reusable library: https://github.com/sh15aa/botserusable\n\nBefore implementing any common functionality:\n1. Inspect https://raw.githubusercontent.com/sh15aa/botserusable/main/registry/modules.json\n2. Download compatible modules: curl -sSL https://raw.githubusercontent.com/sh15aa/botserusable/main/{path} -o {path}\n3. Reuse first. Build second.`;
+      navigator.clipboard.writeText(template).then(() => {
+        showToast('AGENTS.md template copied!');
+      });
+    }
+
+    // Close modal on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // Initialize
+    loadModules();
+  </script>
+</body>
+</html>
